@@ -121,6 +121,8 @@ function showBanner() {
 
 	frappe.call({
 		method: "fc_saas_helper.api.get_integrated_billing_dashboard_url",
+		freeze: true,
+		freeze_message: __("Loading..."),
 		callback: (r) => {
 			if (r.message) {
 				$(d.modal_body).html(`
