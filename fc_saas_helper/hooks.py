@@ -11,7 +11,7 @@ app_license = "apache-2.0"
 
 # include js, css files in header of desk.html
 # app_include_css = "/assets/fc_saas_helper/css/fc_saas_helper.css"
-# app_include_js = "/assets/fc_saas_helper/js/fc_saas_helper.js"
+app_include_js = "/assets/fc_saas_helper/js/banner.js"
 
 # include js, css files in header of web template
 # web_include_css = "/assets/fc_saas_helper/css/fc_saas_helper.css"
