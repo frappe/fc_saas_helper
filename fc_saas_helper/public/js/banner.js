@@ -4,17 +4,19 @@ $(document).ready(function () {
 		!frappe.is_mobile() &&
 		frappe.user.has_role("System Manager")
 	) {
-        frappe.call({
-            method: "fc_saas_helper.api.current_site_info",
-            callback: (r) => {
-                const response = r.message;
-                if(response.trial_end_date) {
-                    $(".layout-main-section").before(generateTrialSubscriptionBanner(response.trial_end_date));
-                } else {
-                    $(".layout-main-section").before(generateManageBillingBanner());
-                }
-            },
-        })
+		frappe.call({
+			method: "fc_saas_helper.api.current_site_info",
+			callback: (r) => {
+				const response = r.message;
+				if (response.trial_end_date) {
+					$(".layout-main-section").before(
+						generateTrialSubscriptionBanner(response.trial_end_date)
+					);
+				} else {
+					$(".layout-main-section").before(generateManageBillingBanner());
+				}
+			},
+		});
 	}
 });
 
@@ -115,13 +117,20 @@ function showBanner() {
 		title: __("Manage Billing"),
 		size: "extra-large",
 	});
+	d.modal_body[0].style.setProperty("padding", "0px", "important");
 
 	frappe.call({
 		method: "fc_saas_helper.api.get_integrated_billing_dashboard_url",
 		callback: (r) => {
 			if (r.message) {
-				$(d.body).html(`
-                    <div id="wrapper" style="position:relative; border-radius:12px; overflow:hidden;">
+				$(d.modal_body).html(`
+                    <div style="
+						position:relative;
+    					border-bottom-left-radius: 12px;
+						border-bottom-right-radius: 12px;
+						height: 70vh;
+						overflow:hidden;
+						">
                         <iframe
                             src="${r.message}"
                             style="position: relative; top: 0px; width: 100%; height: 70vh;"
