@@ -4,16 +4,18 @@ $(document).ready(function () {
 		!frappe.is_mobile() &&
 		frappe.user.has_role("System Manager")
 	) {
+		addManageBillingLinkInDropdown();
 		frappe.call({
 			method: "fc_saas_helper.api.current_site_info",
 			callback: (r) => {
 				const response = r.message;
-				if (response.trial_end_date) {
+				if (
+					response.trial_end_date &&
+					window.location.pathname != "/app/in-desk-billing"
+				) {
 					$(".layout-main-section").before(
 						generateTrialSubscriptionBanner(response.trial_end_date)
 					);
-				} else {
-					$(".layout-main-section").before(generateManageBillingBanner());
 				}
 			},
 		});
@@ -58,7 +60,7 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 					px-2
 					py-1
 				"
-				onclick="showBanner()"
+				onclick="openBillingPage()"
 				style="
 					margin: auto;
 					height: fit-content;
@@ -76,72 +78,12 @@ function generateTrialSubscriptionBanner(trialEndDate) {
 `);
 }
 
-function generateManageBillingBanner() {
-	return $(`
-			<div class="flex justify-content-center flex-col px-2 py-2"
-				style="
-					background-color: var(--gray-100);
-					border-radius: 10px;
-					margin-bottom: 20px;
-					z-index: 1;"
-			>
-			<p style="margin: auto 0; margin-right: 20px;">
-				Manage your site's billing and subscription
-			</p>
-			<button id="show-dialog" type="button"
-				class="
-					button-renew
-					px-2
-					py-1
-				"
-				onclick="showBanner()"
-				style="
-					margin: auto;
-					height: fit-content;
-					background-color: transparent;
-					border: 1px solid #171717;
-					color: #171717;
-					border-radius: 8px;
-					margin-right: 0px;
-					font-size: 13px;
-				"
-			>
-			Manage
-			</button>
-			</div>
-`);
+function addManageBillingLinkInDropdown() {
+	$(".dropdown-navbar-user .dropdown-menu .dropdown-item:nth-child(2)").after(
+		`<a class="dropdown-item" onclick="openBillingPage()" target="_self">Manage Billing</a>`
+	);
 }
 
-function showBanner() {
-	const d = new frappe.ui.Dialog({
-		title: __("Manage Billing"),
-		size: "extra-large",
-	});
-	d.modal_body[0].style.setProperty("padding", "0px", "important");
-
-	frappe.call({
-		method: "fc_saas_helper.api.get_integrated_billing_dashboard_url",
-		freeze: true,
-		freeze_message: __("Loading..."),
-		callback: (r) => {
-			if (r.message) {
-				$(d.modal_body).html(`
-                    <div style="
-						position:relative;
-    					border-bottom-left-radius: 12px;
-						border-bottom-right-radius: 12px;
-						height: 70vh;
-						overflow:hidden;
-						">
-                        <iframe
-                            src="${r.message}"
-                            style="position: relative; top: 0px; width: 100%; height: 70vh;"
-                            frameborder="0"
-                        >
-                    </div>
-                `);
-			}
-			d.show();
-		},
-	});
+function openBillingPage() {
+	window.location.href = "/app/in-desk-billing";
 }
