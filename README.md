@@ -1,16 +1,8 @@
-### Fc Saas Helper
-
-FC SaaS Helper
-
-### Installation
-
-You can install this app using the [bench](https://github.com/frappe/bench) CLI:
-
-```bash
-cd $PATH_TO_YOUR_BENCH
-bench get-app $URL_OF_THIS_REPO --branch master
-bench install-app fc_saas_helper
-```
+### Frappe Cloud Saas Helper
+This is a small frappe based app that has some dedicated task
+- Showing the subscription banner based on current plan of site and team's onboarding details
+- Generate the short-lived access token to load the frappe cloud in-desk checkout page securely
+- Have a custom page for billing at `/app/in-desk-billing` route which will load the in-desk checkout page
 
 ### Contributing
 
@@ -20,13 +12,6 @@ This app uses `pre-commit` for code formatting and linting. Please [install pre-
 cd apps/fc_saas_helper
 pre-commit install
 ```
-
-Pre-commit is configured to use the following tools for checking and formatting your code:
-
-- ruff
-- eslint
-- prettier
-- pyupgrade
 
 ### License
 
